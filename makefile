@@ -1,6 +1,6 @@
 all: setup Data
 
-Data: data/genotypes_forRelease_1_20_05.dat.noinfo data/GSE1990_series_matrix.txt.noinfo
+Data: data/genotypes_forRelease_1_20_05.dat.noinfo data/GSE1990_series_matrix.txt.noinfo.avg
 
 setup:
 	mkdir -p data
@@ -19,3 +19,6 @@ data/GSE1990_series_matrix.txt:
 
 data/GSE1990_series_matrix.txt.noinfo: data/GSE1990_series_matrix.txt
 	awk '($$1 !~ /^!/ && $$0!='\n' && $$1 !~ /"ID/) || $$1 ~ /^!Sample_title/ {print}' data/GSE1990_series_matrix.txt | sed 's/"//g' > data/GSE1990_series_matrix.txt.noinfo
+
+data/GSE1990_series_matrix.txt.noinfo.avg: data/GSE1990_series_matrix.txt.noinfo
+	python code/calculate_expr.py data/GSE1990_series_matrix.txt.noinfo > data/GSE1990_series_matrix.txt.noinfo.avg
