@@ -1,6 +1,8 @@
+SHELL=/bin/bash
+
 all: setup Data
 
-Data: data/genotypes_forRelease_1_20_05.dat.noinfo data/GSE1990_series_matrix.txt.noinfo.avg
+Data: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header data/GSE1990_series_matrix.txt.noinfo.avg
 
 setup:
 	mkdir -p data
@@ -12,6 +14,9 @@ data/genotypes_forRelease_1_20_05.dat:
 
 data/genotypes_forRelease_1_20_05.dat.noinfo: data/genotypes_forRelease_1_20_05.dat
 	awk '$$1 !~ /^#/ {print}' data/genotypes_forRelease_1_20_05.dat > data/genotypes_forRelease_1_20_05.dat.noinfo
+
+data/genotypes_forRelease_1_20_05.dat.noinfo.new_header: data/genotypes_forRelease_1_20_05.dat.noinfo
+	cat <(head -n 1 data/genotypes_forRelease_1_20_05.dat.noinfo | sed 's/_probePairKey/id/' | sed 's/_/-/g') <(tail -n +2 data/genotypes_forRelease_1_20_05.dat.noinfo) > data/genotypes_forRelease_1_20_05.dat.noinfo.new_header
 
 data/GSE1990_series_matrix.txt:
 	wget -P ./data ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE1nnn/GSE1990/matrix/GSE1990_series_matrix.txt.gz
