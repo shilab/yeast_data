@@ -2,7 +2,7 @@ SHELL=/bin/bash
 
 all: setup Data
 
-Data: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header data/GSE1990_series_matrix.txt.noinfo.avg
+Data: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out data/GSE1990_series_matrix.txt.noinfo.avg.out
 
 setup:
 	mkdir -p data
@@ -27,3 +27,12 @@ data/GSE1990_series_matrix.txt.noinfo: data/GSE1990_series_matrix.txt
 
 data/GSE1990_series_matrix.txt.noinfo.avg: data/GSE1990_series_matrix.txt.noinfo
 	python code/calculate_expr.py data/GSE1990_series_matrix.txt.noinfo > data/GSE1990_series_matrix.txt.noinfo.avg
+
+code/overlap.py:
+	wget --no-check-certificate -P ./code https://raw.githubusercontent.com/shilab/sample_overlap/315ffbf0c4e5d203f376afa7a6f4256268fb85c5/overlap/overlap.py
+
+data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header data/GSE1990_series_matrix.txt.noinfo.avg code/overlap.py 
+	python code/overlap.py data/genotypes_forRelease_1_20_05.dat.noinfo.new_header data/GSE1990_series_matrix.txt.noinfo.avg
+
+data/GSE1990_series_matrix.txt.noinfo.avg.out: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out
+
