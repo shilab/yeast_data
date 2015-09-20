@@ -13,7 +13,10 @@ with open(filename, 'r') as f:
             i=0
             results = "id"
             while i<len(ids):
-                results+="\t" + ids[i].split("Cy")[0]
+                id = ids[i].split("Cy")[0]
+                if "_" in ids[i]:
+                    id+="_"+ids[i].split("_")[1]
+                results+="\t" + id
                 i+=2
             print(results)
         else:
