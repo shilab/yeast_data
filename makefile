@@ -2,7 +2,7 @@ SHELL=/bin/bash
 
 all: setup Data
 
-Data: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out data/GSE1990_series_matrix.txt.noinfo.avg.out data/genotype_positions data/expression_positions
+Data: data/genotype_matrix data/expression_matrix data/genotype_positions data/expression_positions
 
 setup:
 	mkdir -p data
@@ -45,3 +45,9 @@ data/GPL118.annot:
 
 data/expression_positions: data/GPL118.annot
 	python code/expression_pos.py data/GPL118.annot > data/expression_positions
+
+data/genotype_matrix: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out
+	sed 's/2\t/NULL\t/g' data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out > data/genotype_matrix
+
+data/expression_matrix: data/GSE1990_series_matrix.txt.noinfo.avg.out
+	mv data/GSE1990_series_matrix.txt.noinfo.avg.out data/expression_matrix
