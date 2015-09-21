@@ -2,7 +2,7 @@ SHELL=/bin/bash
 
 all: setup Data
 
-Data: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out data/GSE1990_series_matrix.txt.noinfo.avg.out
+Data: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out data/GSE1990_series_matrix.txt.noinfo.avg.out data/genotype_positions data/expression_positions
 
 setup:
 	mkdir -p data
@@ -36,3 +36,12 @@ data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out: data/genotypes_forR
 
 data/GSE1990_series_matrix.txt.noinfo.avg.out: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out
 
+data/genotype_positions: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header
+	cut -f 1,127,128 data/genotypes_forRelease_1_20_05.dat.noinfo.new_header > data/genotype_positions
+
+data/GPL118.annot:
+	wget -P ./data ftp://ftp.ncbi.nlm.nih.gov/geo/platforms/GPLnnn/GPL118/annot/GPL118.annot.gz 
+	gunzip data/GPL118.annot.gz
+
+data/expression_positions: data/GPL118.annot
+	python code/expression_pos.py data/GPL118.annot > data/expression_positions
