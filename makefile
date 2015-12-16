@@ -47,7 +47,7 @@ data/expression_positions: data/GPL118.annot
 	python code/expression_pos.py data/GPL118.annot > data/expression_positions
 
 data/genotype_matrix: data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out
-	sed 's/2\t/NULL\t/g' data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out > data/genotype_matrix
+	sed 's/\t2\t/\tNULL\t/g' data/genotypes_forRelease_1_20_05.dat.noinfo.new_header.out > data/genotype_matrix
 
 data/expression_matrix: data/GSE1990_series_matrix.txt.noinfo.avg.out
 	mv data/GSE1990_series_matrix.txt.noinfo.avg.out data/expression_matrix
